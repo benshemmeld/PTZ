@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.Configuration;
 using System.Data;
 using System.Drawing;
 using System.Linq;
@@ -13,13 +14,14 @@ namespace PTZ
 {
     public partial class MainForm : Form
     {
-        private string cameraIP = "192.168.1.30";
-        HttpClient client;
+        private readonly string cameraIP;
+        private readonly HttpClient client;
 
         public MainForm()
         {
             InitializeComponent();
 
+            cameraIP = ConfigurationManager.AppSettings["CameraIP"];
             client = new HttpClient();
         }
 
