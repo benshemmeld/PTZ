@@ -33,7 +33,7 @@ namespace PTZ
 
         private void CallPreset(int presetNumber)
         {
-            client.GetAsync($"http://{cameraIP}/cgi-bin/ptzctrl.cgi?ptzcmd&POSCALL&{presetNumber}");
+            client.GetAsync($"http://{cameraIP}/cgi-bin/ptzctrl.cgi?ptzcmd&poscall&{presetNumber}");
         }
 
         private void btnPreset4_Click(object sender, EventArgs e)
