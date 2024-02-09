@@ -33,6 +33,7 @@
             this.btnPreset2 = new System.Windows.Forms.Button();
             this.button3 = new System.Windows.Forms.Button();
             this.btnPreset4 = new System.Windows.Forms.Button();
+            this.btnPreset5 = new System.Windows.Forms.Button();
             this.SuspendLayout();
             // 
             // btnPreset1
@@ -79,15 +80,28 @@
             this.btnPreset4.UseVisualStyleBackColor = true;
             this.btnPreset4.Click += new System.EventHandler(this.btnPreset4_Click);
             // 
+            // btnPreset5
+            // 
+            this.btnPreset5.Font = new System.Drawing.Font("Microsoft Sans Serif", 14F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.btnPreset5.Location = new System.Drawing.Point(11, 409);
+            this.btnPreset5.Name = "btnPreset5";
+            this.btnPreset5.Size = new System.Drawing.Size(447, 93);
+            this.btnPreset5.TabIndex = 4;
+            this.btnPreset5.Text = "Centre && Standing Mic";
+            this.btnPreset5.UseVisualStyleBackColor = true;
+            this.btnPreset5.Click += new System.EventHandler(this.btnPreset5_Click);
+            // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(9F, 20F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(470, 420);
+            this.ClientSize = new System.Drawing.Size(470, 511);
+            this.Controls.Add(this.btnPreset5);
             this.Controls.Add(this.btnPreset4);
             this.Controls.Add(this.button3);
             this.Controls.Add(this.btnPreset2);
             this.Controls.Add(this.btnPreset1);
+            this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.Name = "MainForm";
             this.Text = "PTZ";
@@ -101,6 +115,7 @@
         private System.Windows.Forms.Button btnPreset2;
         private System.Windows.Forms.Button button3;
         private System.Windows.Forms.Button btnPreset4;
+        private System.Windows.Forms.Button btnPreset5;
     }
 }
 
