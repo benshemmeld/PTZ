@@ -23,7 +23,19 @@ jobs:
 
     - name: Get latest tag
       id: latest_tag
-      run: echo "::set-output name=tag::$(git describe --tags $(git rev-list --tags --max-count=1))"
+      uses: actions/github-script@v4
+      with:
+        github-token: ${{ secrets.GITHUB_TOKEN }}
+        script: |
+          const response = await github.git.listMatchingRefs({
+            owner: context.repo.owner,
+            repo: context.repo.repo,
+            ref: 'tags/',
+            per_page: 1
+          });
+          const latestTag = response.data[0]?.ref.replace('refs/tags/', '');
+          console.log(latestTag);
+          return { tag: latestTag };
 
     - name: Determine next version
       id: next_version
