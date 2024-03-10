@@ -14,6 +14,11 @@ namespace PTZ
         [STAThread]
         static void Main()
         {
+            if (!OperatingSystem.IsWindowsVersionAtLeast(6, 1))
+            {
+                //Only runs on Windows 6.1 or later
+                return;
+            }
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
             Application.Run(new MainForm());
