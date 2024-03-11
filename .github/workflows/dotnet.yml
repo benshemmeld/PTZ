@@ -17,10 +17,10 @@ jobs:
     - name: Setup .NET
       uses: actions/setup-dotnet@v3
       with:
-        dotnet-version: 8.0.x
+        dotnet-version: 8.0.x    
 
-    - name: Get latest tag
-      id: latest_tag
+    - name: Determine next version
+      id: next_version
       uses: actions/github-script@v4
       with:
         github-token: ${{ secrets.GITHUB_TOKEN }}
@@ -32,21 +32,14 @@ jobs:
             per_page: 1
           });
           const latestTag = response.data[0]?.ref.replace('refs/tags/', '');
-          console.log(latestTag);
-          return { tag: latestTag };
-
-    - name: Determine next version
-      id: next_version
-      uses: actions/github-script@v4
-      with:
-        github-token: ${{ secrets.GITHUB_TOKEN }}
-        script: |
-          const currentTag = "${{ steps.latest_tag.outputs.tag }}";
-          console.log("Current tag: " + currentTag);
-          const versionParts = currentTag.split('.').map(part => parseInt(part));
-          console.log(versionParts);
-          
-          return { next_tag: "4.0.0" };
+          const versionParts = latestTag.split('.').map(part => parseInt(part));
+          if (versionParts.length !== 3 || versionParts.some(isNaN)) {
+            throw new Error('Invalid tag format');
+          }
+          versionParts[2] += 1; // Increment the patch version
+          const nextTag = versionParts.join('.');
+          console.log(nextTag);
+          return { next_tag: nextTag };
         
     - name: Restore dependencies
       run: dotnet restore
