@@ -42,9 +42,12 @@ jobs:
         github-token: ${{ secrets.GITHUB_TOKEN }}
         script: |
           const currentTag = "${{ steps.latest_tag.outputs.tag }}";
-          const currentVersion = currentTag.split('.').map(Number);
-          currentVersion[2] += 1;
-          const nextTag = currentVersion.join('.');
+          const versionParts = currentTag.split('.').map(part => parseInt(part));
+          if (versionParts.length !== 3 || versionParts.some(isNaN)) {
+            throw new Error('Invalid tag format');
+          }
+          versionParts[2] += 1; // Increment the patch version
+          const nextTag = versionParts.join('.');
           console.log(nextTag);
           return { next_tag: nextTag };
         
