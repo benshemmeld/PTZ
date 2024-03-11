@@ -39,7 +39,16 @@ jobs:
 
     - name: Determine next version
       id: next_version
-      run: echo "::set-output name=next_tag::$(echo "${{ steps.latest_tag.outputs.tag }}.1" | awk -F. '{print $1"."$2"."$3+1}')"
+      uses: actions/github-script@v4
+      with:
+        github-token: ${{ secrets.GITHUB_TOKEN }}
+        script: |
+          const currentTag = "${{ steps.latest_tag.outputs.tag }}";
+          const currentVersion = currentTag.split('.').map(Number);
+          currentVersion[2] += 1;
+          const nextTag = currentVersion.join('.');
+          console.log(nextTag);
+          return { next_tag: nextTag };
         
     - name: Restore dependencies
       run: dotnet restore
