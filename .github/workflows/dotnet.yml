@@ -21,25 +21,10 @@ jobs:
 
     - name: Determine next version
       id: next_version
-      uses: actions/github-script@v4
-      with:
-        github-token: ${{ secrets.GITHUB_TOKEN }}
-        script: |
-          const response = await github.git.listMatchingRefs({
-            owner: context.repo.owner,
-            repo: context.repo.repo,
-            ref: 'tags/',
-            per_page: 1
-          });
-          const latestTag = response.data[0]?.ref.replace('refs/tags/', '');
-          const versionParts = latestTag.split('.').map(part => parseInt(part));
-          if (versionParts.length !== 3 || versionParts.some(isNaN)) {
-            throw new Error('Invalid tag format');
-          }
-          versionParts[2] += 1; // Increment the patch version
-          const nextTag = versionParts.join('.');
-          console.log(nextTag);
-          return { next_tag: nextTag };
+      run: |
+        latestTag=$(git describe --tags $(git rev-list --tags --max-count=1))
+        nextVersion=$(echo "${latestTag}.1" | awk -F. '{print $1"."$2"."$3+1}')
+        echo "::set-output name=next_tag::${nextVersion}"
         
     - name: Restore dependencies
       run: dotnet restore
