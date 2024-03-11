@@ -42,7 +42,7 @@ jobs:
         github-token: ${{ secrets.GITHUB_TOKEN }}
         script: |
           const currentTag = "${{ steps.latest_tag.outputs.tag }}";
-          console.log(currentTag);
+          console.log(${{ steps.latest_tag.outputs }});
           const versionParts = currentTag.split('.').map(part => parseInt(part));
           console.log(versionParts);
           if (versionParts.length !== 3 || versionParts.some(isNaN)) {
