@@ -42,7 +42,9 @@ jobs:
         github-token: ${{ secrets.GITHUB_TOKEN }}
         script: |
           const currentTag = "${{ steps.latest_tag.outputs.tag }}";
+          console.log(currentTag);
           const versionParts = currentTag.split('.').map(part => parseInt(part));
+          console.log(versionParts);
           if (versionParts.length !== 3 || versionParts.some(isNaN)) {
             console.log(currentTag);
             throw new Error('Invalid tag format');
