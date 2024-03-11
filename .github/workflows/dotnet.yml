@@ -44,6 +44,7 @@ jobs:
           const currentTag = "${{ steps.latest_tag.outputs.tag }}";
           const versionParts = currentTag.split('.').map(part => parseInt(part));
           if (versionParts.length !== 3 || versionParts.some(isNaN)) {
+            console.log(currentTag);
             throw new Error('Invalid tag format');
           }
           versionParts[2] += 1; // Increment the patch version
