@@ -107,6 +107,7 @@
             btnPreset6.TabIndex = 5;
             btnPreset6.Text = "Centre && Table";
             btnPreset6.UseVisualStyleBackColor = true;
+            btnPreset6.Click += btnPreset6_Click;
             // 
             // MainForm
             // 
