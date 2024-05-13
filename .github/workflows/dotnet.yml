@@ -11,61 +11,41 @@ on:
 
 jobs:
   build:
-
     runs-on: ubuntu-latest
-
     steps:
     - uses: actions/checkout@v3
     - name: Setup .NET
       uses: actions/setup-dotnet@v3
       with:
-        dotnet-version: 8.0.x
-
-    - name: Get latest tag
-      id: latest_tag
-      uses: actions/github-script@v4
-      with:
-        github-token: ${{ secrets.GITHUB_TOKEN }}
-        script: |
-          const response = await github.git.listMatchingRefs({
-            owner: context.repo.owner,
-            repo: context.repo.repo,
-            ref: 'tags/',
-            per_page: 1
-          });
-          const latestTag = response.data[0]?.ref.replace('refs/tags/', '');
-          console.log(latestTag);
-          return { tag: latestTag };
+        dotnet-version: 8.0.x    
 
     - name: Determine next version
       id: next_version
-      uses: actions/github-script@v4
-      with:
-        github-token: ${{ secrets.GITHUB_TOKEN }}
-        script: |
-          const currentTag = "${{ steps.latest_tag.outputs.tag }}";
-          const currentVersion = currentTag.split('.').map(Number);
-          currentVersion[2] += 1;
-          const nextTag = currentVersion.join('.');
-          console.log(nextTag);
-          return { next_tag: nextTag };
+      run: |
+        latestTag=$(git describe --tags $(git rev-list --tags --max-count=1))
+        nextVersion=$(echo "${latestTag}.1" | awk -F. '{print $1"."$2"."$3+1}')
+        echo "::set-output name=next_tag::${nextVersion}"
         
     - name: Restore dependencies
       run: dotnet restore
+      
     - name: Build
       run: dotnet build --no-restore -c Release
+      
     - name: Publish
       run: dotnet publish -c Release -o ./publish
+      
     - name: Create Release
       id: create_release
       uses: actions/create-release@v1
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       with:
-        tag_name: ${{ steps.next_version.outputs.next_tag }}
-        release_name: Release ${{ steps.next_version.outputs.next_tag }}
+        tag_name: ${{ steps.next_version.outputs.result.next_tag }}
+        release_name: Release ${{ steps.next_version.outputs.result.next_tag }}
         draft: false
         prerelease: false
+        
     - name: Upload Release Asset
       id: upload-release-asset
       uses: actions/upload-release-asset@v1
