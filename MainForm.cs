@@ -53,5 +53,10 @@ namespace PTZ
         {
             CallPreset(5 + _offset);
         }
+
+        private void btnPreset6_Click(object sender, EventArgs e)
+        {
+            CallPreset(6 + _offset);
+        }
     }
 }
